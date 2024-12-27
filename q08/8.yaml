@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: billing-app
+  name: billing-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: billing-app
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: billing-app
+    spec:
+      containers:
+      - image: traefik:v3.3.0-rc
+        name: traefik
+        resources: {}
+status: {}
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: inbound-billing-app
+  namespace: finance
+spec:
+  podSelector:
+    matchLabels:
+      app: billing-app
+
+  policyTypes:
+  - Ingress
+
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchExpressions:
+        - key: namespace
+          operator: In
+          values: ["web"]
