@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: resource-demo
+  labels:
+    app: resource-demo
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: resource-demo
+  template:
+    metadata:
+      labels:
+        app: resource-demo
+    spec:
+      containers:
+      - name: resource-demo
+        image: busybox:stable
+        command: ["sh", "-c", "while true; do echo hello; sleep 10; done"]
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
