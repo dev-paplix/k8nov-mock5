@@ -1,0 +1,114 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: app-blue
+  name: app-blue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-blue
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: app-blue
+    spec:
+      containers:
+        - image: nginx:1.20
+          name: nginx
+          resources: {}
+status: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-blue-service
+spec:
+  type: NodePort
+  selector:
+    app: app-blue
+  ports:
+    - port: 80
+      targetPort: 80
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: app-green
+  name: app-green
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-green
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: app-green
+    spec:
+      containers:
+        - image: nginx:1.21
+          name: nginx
+          resources: {}
+status: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-green-service
+spec:
+  type: NodePort
+  selector:
+    app: app-green
+  ports:
+    - port: 80
+      targetPort: 80
+
+---
+# INITIAL
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app-ingress
+spec:
+  rules:
+    - host: "app.example.com"
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: app-blue-service
+                port:
+                  number: 80
+
+---
+# EDIT THE SAME 'app-ingress' AND CHANGE THE SERVICE TO 'app-green-service'
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app-ingress
+spec:
+  rules:
+    - host: "app.example.com"
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: app-green-service
+                port:
+                  number: 80
