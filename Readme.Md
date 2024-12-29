@@ -34,7 +34,7 @@ Test by stressing the application to ensure the pods respect the defined resourc
 
 Q3:
 
-A specific node in your cluster is dedicated to running a critical application and should not accept any other workloads. This node has a taint with `key=dedicated`, `value=critical`, and e`ffect=NoSchedule`. Ensure that only the pods from a deployment named `critical-app` are allowed to run on this node.
+A specific node in your cluster is dedicated to running a critical application and should not accept any other workloads. This node has a taint with `key=dedicated`, `value=critical`, and `effect=NoSchedule`. Ensure that only the pods from a deployment named `critical-app` are allowed to run on this node.
 
 Task:
 
