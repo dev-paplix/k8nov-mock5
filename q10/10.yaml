@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: frontend-app
+  name: frontend-app
+  namespace: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend-app
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: frontend-app
+    spec:
+      containers:
+        - image: nginx
+          name: nginx
+          resources: {}
+status: {}
+
+---
+kubectl autoscale deployment.apps/frontend-app --min=2 --max=10 --cpu-percent=60 -n frontend

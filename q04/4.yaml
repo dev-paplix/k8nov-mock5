@@ -1,0 +1,27 @@
+kubectl label node node01 role=backend
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: backend-app
+  name: backend-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-app
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: backend-app
+    spec:
+      containers:
+        - image: nginx
+          name: nginx
+      nodeSelector:
+        role: backend
+status: {}
